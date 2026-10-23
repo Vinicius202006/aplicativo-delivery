@@ -60,6 +60,34 @@ class _HomeScreenState extends State<HomeScreen> {
           'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=400',
     },
   ];
+  int bannerAtual = 0;
+
+final List<Map<String, String>> banners = [
+  {
+    'titulo': 'Seu combo favorito!',
+    'descricao': 'Até 30% OFF no hambúrguer',
+    'etiqueta': 'OFERTA ESPECIAL',
+    'botao': 'Ver oferta',
+    'imagem':
+        'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900',
+  },
+  {
+    'titulo': 'Hoje é dia de pizza!',
+    'descricao': 'Muito sabor em cada fatia',
+    'etiqueta': 'MAIS PEDIDOS',
+    'botao': 'Pedir agora',
+    'imagem':
+        'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=900',
+  },
+  {
+    'titulo': 'Uma pausa com açaí',
+    'descricao': 'Refresque seu dia com sabor',
+    'etiqueta': 'EXPERIMENTE',
+    'botao': 'Conferir',
+    'imagem':
+        'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=900',
+  },
+];
 
   @override
   void dispose() {
@@ -279,161 +307,216 @@ class _HomeScreenState extends State<HomeScreen> {
   //============ PROMOCAO ============
 
   Widget _promocao() {
-    return Container(
-      height: 156,
-      margin: const EdgeInsets.fromLTRB(20, 19, 20, 25),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [vermelho, vermelhoEscuro],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+  return Container(
+    height: 175,
+    margin: const EdgeInsets.fromLTRB(20, 19, 20, 25),
+    clipBehavior: Clip.antiAlias,
+    decoration: BoxDecoration(
+      color: vermelhoEscuro,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: vermelho.withOpacity(0.18),
+          blurRadius: 12,
+          offset: const Offset(0, 5),
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: vermelho.withOpacity(0.16),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          Positioned(
-            right: -25,
-            top: -30,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.08),
-              ),
-            ),
-          ),
+      ],
+    ),
+    child: Stack(
+      children: [
+        // Carrossel de imagens
+        PageView.builder(
+          itemCount: banners.length,
+          onPageChanged: (index) {
+            setState(() {
+              bannerAtual = index;
+            });
+          },
+          itemBuilder: (context, index) {
+            final banner = banners[index];
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              16, 17, 16, 15,
-            ),
-            child: Row(
+            return Stack(
+              fit: StackFit.expand,
               children: [
-                Expanded(
-                  flex: 6,
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.20),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Text(
-                          'OFERTA ESPECIAL',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                // Imagem de fundo
+                Image.network(
+                  banner['imagem']!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: vermelhoEscuro,
+                      child: const Icon(
+                        Icons.restaurant,
+                        color: Colors.white,
+                        size: 60,
                       ),
+                    );
+                  },
+                ),
 
-                      const SizedBox(height: 6),
-
-                      const Text(
-                        'Seu combo\nfavorito!',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 19,
-                          height: 1.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      const Text(
-                        'Até 30% OFF no pedido',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-
-                      const SizedBox(height: 7),
-
-                      SizedBox(
-                        height: 28,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Color(0xFFC62828),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                            ),
-                            minimumSize: Size.zero,
-                            tapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: VisualDensity.compact,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: const Text(
-                            'Aproveitar',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                // Degradê para melhorar a leitura do texto
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.black.withOpacity(0.80),
+                        Colors.black.withOpacity(0.55),
+                        Colors.transparent,
+                      ],
+                      stops: const [0.0, 0.48, 1.0],
+                    ),
                   ),
                 ),
 
-                const SizedBox(width: 8),
-
-                Expanded(
-                  flex: 5,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500',
-                      height: 120,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 120,
-                          color: Colors.white.withOpacity(0.15),
-                          child: const Icon(
-                            Icons.lunch_dining,
-                            color: Colors.white,
-                            size: 60,
+                // Texto sobre a imagem
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    16, 14, 12, 28,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FractionallySizedBox(
+                      widthFactor: 0.75,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: vermelho,
+                              borderRadius:
+                                  BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              banner['etiqueta']!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
                           ),
-                        );
-                      },
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            banner['titulo']!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 19,
+                              height: 1.05,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+
+                          const SizedBox(height: 5),
+
+                          Text(
+                            banner['descricao']!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                          ),
+
+                          const SizedBox(height: 9),
+
+                          SizedBox(
+                            height: 27,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        banner['titulo']!,
+                                      ),
+                                    ),
+                                  );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: vermelhoEscuro,
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                minimumSize: Size.zero,
+                                tapTargetSize:
+                                    MaterialTapTargetSize
+                                        .shrinkWrap,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(7),
+                                ),
+                              ),
+                              child: Text(
+                                banner['botao']!,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ],
+            );
+          },
+        ),
+
+        // Indicadores do carrossel
+        Positioned(
+          bottom: 10,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              banners.length,
+              (index) {
+                final selecionado = bannerAtual == index;
+
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 3,
+                  ),
+                  width: selecionado ? 17 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: selecionado
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.55),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                );
+              },
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   //============ TITULO DAS SECOES ============
 

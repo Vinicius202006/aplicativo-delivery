@@ -1,13 +1,12 @@
-
-import 'package:deliveryapp/login.dart';
+import 'package:deliveryapp/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'search_screen.dart';
 
 void main() {
   runApp(
-    MaterialApp(
+    const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Delivery App',
-      home: const Login(),
+      home: HomeScreen(),
     ),
   );
 }
