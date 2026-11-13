@@ -59,7 +59,9 @@ flutter:
   # Assets da aplicação
   assets:
     - assets/google_logo.png
-
+    - assets/hamburguer.jpg
+    - assets/pizza.jpg
+    - assets/sorvete.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
